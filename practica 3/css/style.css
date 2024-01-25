@@ -1,0 +1,200 @@
+*{
+    user-select: none
+}
+/* inicio */
+body{
+    background-image: url("../img/background.png");
+    background-size: cover;
+    text-align: center;
+    margin: 0px;
+}
+#header{
+    position: relative;
+    background-color: rgb(177, 90, 90);
+    margin: 0px 0 40px 0;
+    padding: 0px;
+    height: 60px;
+    line-height: 60px;
+    color: aliceblue;
+    font-weight: bold;
+    font-size: xx-large;
+    text-shadow: 4px 4px 2px rgb(0, 0, 0) ;
+}
+
+#carteles{
+    text-align: center;
+}
+.cartel{
+    display: inline-block;
+    margin: 20px;
+    margin-top: 80px;
+    vertical-align: top;
+    cursor: pointer;
+}
+.cartel img{
+    width: 250px;
+    height: 360px;
+    border-radius: 15px;
+    border: 4px dashed white ;
+    box-shadow: 1px 1px 15px 15px grey;
+}
+.cartel:hover img{
+    width: 260px;
+    height: 370px;
+    position: relative;
+    top:-5px;
+}
+.cartel:hover p{
+    background-color: dimgray;
+}
+.cartel p{
+    margin: 0px auto 5px auto;
+    font-weight: bold;
+    font-size: xx-large;
+    font-family: 'Courier New', Courier, monospace;
+    text-shadow: 1.5px 1.5px 2px rgb(0, 0, 0) ;
+    background-color: rgb(104, 116, 128);
+    box-shadow: 0px 0px 20px 20px white;
+    width: 300px;
+    border-radius: 10px;
+    color: rgb(195, 204, 233);
+}
+/* .cartel a{
+    text-decoration: none;
+} */
+
+
+/* pelicula */
+#cine,#asientos {
+    border: 1px solid black; 
+    white-space: nowrap;
+} 
+
+#cine{
+    display: inline-block;
+}
+
+#titulo {
+    width: 60%;
+    height: 70px;
+    line-height: 70px;
+    border-radius: 10px;
+    text-align: center;
+    font-weight: bold;
+    color: black;
+    font-size: xx-large;
+    text-shadow: 0 0 4px white;
+    margin: auto;
+    background-image: url(../img/cartel.png);
+    background-position: center;
+    background-size: 100% 100%;
+}
+iframe{
+    margin: 0;
+    padding: 0;
+    border: 0px ;
+    width: 100%;
+}
+#precio,#precioTotal{
+    color: white;
+    font-size: 1.3em;
+    font-weight: bold;
+    background-color: rgb(0, 0, 0);
+}
+.fila{
+    width: 100%;
+}
+.asiento{
+    display: inline-block;
+    width: 37px;
+    padding: .5px;
+    text-align: center;
+    line-height: 35px;
+    margin:4px 2.5px;
+    border-radius: 5px;
+    font-weight: bold;
+    font-size: small;
+    cursor: pointer;
+}
+
+.libre{
+    background-color: rgb(10, 197, 10);
+}
+.encima{
+    background-color: rgb(168, 250, 168);
+}
+.ocupado{
+    background-color: rgb(134, 0, 0);
+    color: rgb(255, 255, 129);
+}
+.escogido{
+    background-color: rgb(255, 123, 0);
+}
+#flecha{
+    position: absolute;
+    top: 0px;
+    left: 15px;
+    background-image: url(../img/flecha.png);
+    background-size: cover;
+    background-position: center;
+    width: 60px;
+    height: 60px;
+}
+#flecha a{
+    display: block;
+    width: 60px;
+    height: 60px;
+}
+
+#botones>div{
+    display: inline-block;
+    background-color: aliceblue;
+    margin: 10px;
+    width: 150px;
+    height: 50px;
+    text-align: center;
+    line-height: 50px;
+    border-radius: 10px;
+    box-shadow: inset 0px 0px 2px 6px rgb(231, 192, 140);
+    font-weight: bold;
+    font-size: large;
+    font-family:  Courier, monospace;
+    cursor: pointer;
+}
+#botones>div:hover{
+    box-shadow: inset 0px 0px 2px 6px rgb(96, 131, 55);
+}
+
+
+
+@media (max-width: 1050px){
+.cartel{
+    display: block;
+    width: min-content;
+    margin: 80px auto ;
+}
+
+.cartel img{
+    width: 450px;
+    height: auto;
+    position: relative;
+    top: 0px;
+}
+.cartel:hover img{
+    width: 450px;
+    height: auto;
+    opacity: 1;
+    top: 0;
+}
+.cartel img{
+    background-color: white;
+    opacity: 0.6;
+}
+.cartel p{
+    opacity: 0.6;
+}
+.cartel:hover p{
+    opacity: 1;
+
+}
+}

@@ -1,0 +1,74 @@
+/* *{border: 1px solid green;} */
+body{
+    padding: 50px;
+}
+.fa-note-sticky{
+    color: yellow;
+}
+.fa-folder{
+    color: orange;
+}
+.fa-triangle-exclamation{
+    color: red;
+}
+.fa-image{
+    color: aquamarine;
+}
+.fa-music{
+    color:purple ;
+}
+li{
+    position: relative;
+    left: 1.5em;
+    list-style-type: none;
+    padding: 10px 0px 10px 10px;
+}
+ul{
+    position: relative;
+    left: 1.5em;
+    padding: 10px 0px 10px 10px;
+
+}
+.icon{
+    text-shadow: 3px 3px black, -1px -2px black;
+    margin: 5px 0px 15px 10px;
+}
+i{
+    padding-right: 10px;
+}
+button{
+    margin-left: 10px;
+}
+
+#directorio,#buscador{
+    width: fit-content;
+    display: inline-block;
+}
+#buscador{
+    vertical-align: top;
+    margin-left: 100px;
+}
+.contraer > li, .contraer > ul{
+    display: none;
+}
+
+
+
+
+.oculto{
+    visibility: collapse !important;
+    padding: 0;
+}
+li.oculto{
+    height: 0;
+    margin-top: -0px;
+    margin-bottom: -0px;
+}
+ul.oculto{
+    margin-top: -20px;
+    margin-bottom: -10px;
+}
+.oculto>li, .oculto>ul{
+    visibility: visible;
+    display: block;
+}
