@@ -26,10 +26,10 @@ class Folder {
         this.ul = $(document.createElement("ul"))
             .html(iconos["folder"] + nombre)
         if (ulPadre) {
-            // this.ul.fadeOut(0)
+            this.ul.fadeOut(0)
             ulPadre.append(this.ul)
-            // setTimeout(10,this.ul.slideDown(300))
-            // setTimeout(1,this.ul.fadeIn("slow"))
+            this.ul.animate({top:"10px"},{duration:1000,queue:false})
+            this.ul.fadeIn("slow")
         }
         this.anhadirBotonDeAnhadir()
         this.anhadirBotonEliminar()
@@ -43,7 +43,7 @@ class Folder {
     anhadirElemento(nombre) {
         // Comprueba si hay un elemento en el nivel que se va a añadir, si existe no lo crea
         let existeElemento = false
-        this.ul.children().each(function (hijo) {
+        this.ul.children().each(function (index,hijo) {
             if (["UL", "LI"].includes(hijo.tagName)) {
                 if (hijo.childNodes[1].data == nombre) {
                     existeElemento = true
@@ -58,7 +58,8 @@ class Folder {
                 .html((iconos[nombre.split(".")[1]] || iconos["ERROR"]) + nombre) //añade el icono de la extension, si no hay, añade el icono de error 
                 archivo.fadeOut(0)
                 this.ul.append(archivo)
-                archivo.fadeIn("slow")
+                archivo.animate({top:"10px"},{duration:500,queue:false})
+                archivo.fadeIn(500)
             this.anhadirBotonEliminar(archivo)
         } else if (nombre.split(".").length == 1) { // si no tiene extension, significa que es una carpeta
             new Folder(nombre, this.ul)
@@ -82,34 +83,43 @@ class Folder {
      * @param {HTMLUListElement}  elemento 
      */
     anhadirBotonEliminar(elemento = this.ul) {
-        if (!elemento.parentElement || elemento.parentElement.tagName == "DIV") {
+        console.log(elemento.parent().length)
+        if (elemento.parent().length == 0 || elemento.parent().prop("tagName") == "DIV") {
             return
         }
-        let buttonEliminar = document.createElement("button")
-        buttonEliminar.innerHTML = "X"
-        buttonEliminar.addEventListener("click", function (e) {
+        let buttonEliminar = $(document.createElement("button"))
+        buttonEliminar.text("X")
+        buttonEliminar.on("click", function (e) {
             if (e.target.parentElement.querySelectorAll("ul, li").length == 0 && e.target.parentElement.parentElement.tagName != "DIV") {
-                e.target.parentElement.remove()
+                $(e.target.parentElement).fadeOut(250)
+                setTimeout(function(){$(e.target.parentElement).remove()},250)
                 buscador()
             }
         })
-        elemento.appendChild(buttonEliminar)
+        elemento.append(buttonEliminar)
     }
 
     /**
      * añade un boton a la carpeta para ocultar o mostrar sus elementos
      */
     anhadirBotonExpandir() {
-        let botonExpandir = document.createElement("button")
-        botonExpandir.innerText = "^"
-        botonExpandir.onclick = function () {
-            this.ul.classList.toggle("contraer")
-            if (botonExpandir.innerText == "v") {
-                botonExpandir.innerText = "^"
-            } else {
-                botonExpandir.innerText = "v"
-            }
-        }.bind(this)
+        let size = 0
+        let botonExpandir = $(document.createElement("button"))
+            .text("^")
+            .on("click",function (e) {
+                let lista = $(e.target.parentElement)
+                if(!size){size = lista.outerHeight()-15 + "px"}
+                console.log(size)
+                // setTimeout(function(){lista.toggleClass("contraer")},1000)
+
+                if (botonExpandir.text() == "v") {
+                    lista.animate({height:size},{duration:1000})
+                    botonExpandir.text("^")
+                } else {
+                    lista.animate({height:"15px"},{duration:1000})
+                    botonExpandir.text("v")
+                }
+        })
 
         this.ul.append(botonExpandir)
     }
@@ -143,9 +153,6 @@ class Folder {
     importar(diccionario) {
         this.ul.innerHTML = iconos["folder"]
         this.ul.innerHTML += diccionario["nombre"]
-        this.anhadirBotonDeAnhadir()
-        this.anhadirBotonEliminar()
-        this.anhadirBotonExpandir()
         for (const archivo of diccionario["elementos"]) {
             if (typeof archivo == "string") {
                 this.anhadirElemento(archivo)
