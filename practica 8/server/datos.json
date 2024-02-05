@@ -1,0 +1,14 @@
+{
+    "nombre": "DanielcasaJson",
+    "apellidos": "Rosales Martin",
+    "dni": "78588395V",
+    "nacimiento": "05/03/2000",
+    "postal": "35509",
+    "email": "adaniel.rosles@gmail.com",
+    "fijo": "987654321",
+    "movil": "654321987",
+    "iban": "ES1234567891234567891234",
+    "credito": "123456789123",
+    "password": "123456789321d_",
+    "password_repeat": "123456789321d_"
+}

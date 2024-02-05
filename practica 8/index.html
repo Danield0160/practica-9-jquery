@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Practica 8</title>
+   <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+   <form action="" id="formulario" onsubmit="return false">
+
+      <label for="html">Localhost</label>
+      <input class="radio" type="radio" id="html" name="direccion_server" value="localhost" checked>
+      <label for="css">Clase</label>
+      <input class="radio" type="radio" id="css" name="direccion_server" value="clase">
+      <label for="javascript">server externo</label>
+      <input class="radio" type="radio" id="javascript" name="direccion_server" value="server">
+
+      <p>Nombre</p>
+      <input class="formulario" type="text" id="nombre">
+      <span>Tiene que se una o dos palabras que empiece por mayuscula</span>
+
+      <p>Apellidos</p>
+      <input class="formulario" type="text" id="apellidos">
+      <span>tiene que ser dos palabras empezadas por mayuscula</span>
+
+      <p>DNI</p>
+      <input class="formulario" type="text" id="dni">
+      <span>tiene que ser 8 numeros seguidos de una mayuscula o 7 numeros precedido y seguido de una mayuscula</span>
+
+      <p>Fecha de nacimiento</p>
+      <input class="formulario" type="text" id="nacimiento">
+      <span>tiene que tener formato dd/mm/aaaa</span>
+
+      <p>Codigo postal</p>
+      <input class="formulario" type="text" id="postal">
+      <span>tiene que ser 5 numeros</span>
+
+      <p>E-mail</p>
+      <input class="formulario" type="text" id="email">
+      <span>tiene que ser un email valido</span>
+
+      <p>Telefono Fijo</p>
+      <input class="formulario" type="text" id="fijo">
+      <span>tiene que empezar en 9</span>
+
+      <p>Telefono movil</p>
+      <input class="formulario" type="text" id="movil">
+      <span>tiene que empezar en 6</span>
+
+      <p>IBAN</p>
+      <input class="formulario" type="text" id="iban">
+      <span>tiene que ser VISA, tiene que empezar en ES y seguir con 22 letras</span>
+
+      <p>Tarjeta de credito</p>
+      <input class="formulario" type="text" id="credito">
+      <span>tiene que tener 12 numeros</span>
+
+      <p>Contraseña</p>
+      <input class="formulario" type="password" id="password">
+      <span>tiene que tener 12 caracteres, con minimo 1 letra, un numero, y un caracter especial</span>
+
+      <p>repetir contraseña</p>
+      <input class="formulario" type="password" id="password_repeat">
+      <span>tiene que ser igual que la contraseña y valida</span>
+
+      <div id="botones">
+         <!-- <button id="guardar">save local</button> -->
+         <!-- <button id="recuperar">load local</button> -->
+         <button id="recuperarJson">cargar Json</button>
+         <button id="recuperarPhp">cargar Php</button>
+         <button id="guardarPhp">guardar Php</button>
+         <div id="bbdd">
+            <input type="text">
+            <button id="recuperarBBDD">cargar BBDD</button>
+         </div>
+         <button id="guardarBBDD">guardar BBDD</button>
+      </div>
+   </form>
+</body>
+<script src="js/script.js"></script>
+
+</html>
