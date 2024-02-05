@@ -28,7 +28,7 @@ class Folder {
         if (ulPadre) {
             this.ul.fadeOut(0)
             ulPadre.append(this.ul)
-            this.ul.animate({top:"10px"},{duration:1000,queue:false})
+            this.ul.animate({ top: "10px" }, { duration: 1000, queue: false })
             this.ul.fadeIn("slow")
         }
         this.anhadirBotonDeAnhadir()
@@ -42,8 +42,9 @@ class Folder {
      */
     anhadirElemento(nombre) {
         // Comprueba si hay un elemento en el nivel que se va a añadir, si existe no lo crea
+        if (!nombre) { return }
         let existeElemento = false
-        this.ul.children().each(function (index,hijo) {
+        this.ul.children().each(function (index, hijo) {
             if (["UL", "LI"].includes(hijo.tagName)) {
                 if (hijo.childNodes[1].data == nombre) {
                     existeElemento = true
@@ -56,10 +57,10 @@ class Folder {
         if (nombre.split(".").length == 2 && nombre.split(".")[1]) { // Comprueeba si tiene una extension
             let archivo = $(document.createElement("li"))
                 .html((iconos[nombre.split(".")[1]] || iconos["ERROR"]) + nombre) //añade el icono de la extension, si no hay, añade el icono de error 
-                archivo.fadeOut(0)
-                this.ul.append(archivo)
-                archivo.animate({top:"10px"},{duration:500,queue:false})
-                archivo.fadeIn(500)
+            archivo.fadeOut(0)
+            this.ul.append(archivo)
+            archivo.animate({ top: "10px" }, { duration: 500, queue: false })
+            archivo.fadeIn(500)
             this.anhadirBotonEliminar(archivo)
         } else if (nombre.split(".").length == 1) { // si no tiene extension, significa que es una carpeta
             new Folder(nombre, this.ul)
@@ -92,7 +93,7 @@ class Folder {
         buttonEliminar.on("click", function (e) {
             if (e.target.parentElement.querySelectorAll("ul, li").length == 0 && e.target.parentElement.parentElement.tagName != "DIV") {
                 $(e.target.parentElement).fadeOut(250)
-                setTimeout(function(){$(e.target.parentElement).remove()},250)
+                setTimeout(function () { $(e.target.parentElement).remove() }, 250)
                 buscador()
             }
         })
@@ -106,20 +107,24 @@ class Folder {
         let size = 0
         let botonExpandir = $(document.createElement("button"))
             .text("^")
-            .on("click",function (e) {
+            .on("click", function (e) {
                 let lista = $(e.target.parentElement)
-                if(!size){size = lista.outerHeight()-15 + "px"}
-                console.log(size)
+
+                let size_now = lista.css("height")
+                let full_size = lista.css("height", "auto").css("height")
+                lista.css("height", size_now)
                 // setTimeout(function(){lista.toggleClass("contraer")},1000)
 
                 if (botonExpandir.text() == "v") {
-                    lista.animate({height:size},{duration:1000})
+                    //agrandando
+                    lista.animate({ height: full_size }, 1000, function () { lista.css("height", "auto") })
                     botonExpandir.text("^")
                 } else {
-                    lista.animate({height:"15px"},{duration:1000})
+                    //reduciendo
+                    lista.animate({ height: "15px" }, 1000)
                     botonExpandir.text("v")
                 }
-        })
+            })
 
         this.ul.append(botonExpandir)
     }
@@ -166,7 +171,7 @@ class Folder {
 
 // boton para generar un directorio de ejemplo
 let botonCreador = $(document.createElement("button")).text("crear arbol de ejemplo")
-    .on("click", function () { home.importar(dicc)})
+    .on("click", function () { home.importar(dicc) })
 $("#directorio").append(botonCreador)
 
 
@@ -175,7 +180,7 @@ let botonEliminador = document.createElement("button");
 botonEliminador.innerHTML = "Eliminar arbol"
 $("#directorio").append(botonEliminador)
 botonEliminador.onclick = function () {
-    home.ul.children().each(function (index,hijo) {
+    home.ul.children().each(function (index, hijo) {
         if (["UL", "LI"].includes(hijo.tagName)) {
             hijo.remove()
         }
@@ -210,7 +215,7 @@ window.onbeforeunload = function () {
  */
 function buscar(nombre, ulEnElQueBuscar) {
     let resultado = []
-    for (elemento of Array.from(ulEnElQueBuscar.children)) {
+    for (elemento of Array.from($(ulEnElQueBuscar).children())) {
         if (!["UL", "LI"].includes(elemento.tagName)) {
             continue
         }
