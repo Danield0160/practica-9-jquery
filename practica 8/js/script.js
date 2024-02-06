@@ -31,7 +31,7 @@ class Formulario {
         "password": {
             test:
                 function (texto) {
-                    this.comprobarCampo(document.getElementById("password_repeat").value, "password_repeat")
+                    this.comprobarCampo($("#password_repeat").val(), "password_repeat")
                     return this.comprobantes["pass"].test(texto)
                 }.bind(this)
         },
@@ -39,21 +39,22 @@ class Formulario {
         "password_repeat": {
             test:
                 function (texto) {
+                    console.log(texto, $("#password").val())
                     if (!this.comprobantes["pass"].test(texto)) {
                         return false
                     } else {
-                        return document.getElementById("password").value == texto
+                        return $("#password").val() == texto
                     }
                 }.bind(this)
         }
     }
     // inicar la escucha de los inputs y poner funcionalidad en los botnoes
     constructor() {
-        let hijos = [...document.getElementById("formulario").querySelectorAll(".formulario")]
+        let hijos = [...$("#formulario").find(".formulario")]
         for (let hijo of hijos) {
             if (!hijo.id) { continue }
-            hijo.addEventListener("input", function (e) {
-                this.comprobarCampo(e.target.value, e.target.id)
+            $(hijo).on("input", function (e) {
+                this.comprobarCampo(e.target.value, $(e.target).attr("id"))
             }.bind(this))
         }
 
@@ -64,20 +65,21 @@ class Formulario {
     //comprueba si un campo esta bien, y lo colorea en base a ello
     comprobarCampo(texto, id_formulario) {
         if (this.comprobantes[id_formulario].test(texto)) {
-            document.getElementById(id_formulario).classList.add("valido")
-            document.getElementById(id_formulario).classList.remove("no_valido")
+            $("#" + id_formulario).addClass("valido")
+            $("#" + id_formulario).removeClass("no_valido")
             return true
         } else {
-            document.getElementById(id_formulario).classList.add("no_valido")
-            document.getElementById(id_formulario).classList.remove("valido")
+            $("#" + id_formulario).addClass("no_valido")
+            $("#" + id_formulario).removeClass("valido")
             return false
         }
     }
-    comprobarTodosLosCampos(){
+    //TODO
+    comprobarTodosLosCampos() {
         let resultado = true
         let hijos = [...document.getElementById("formulario").querySelectorAll("#formulario>.formulario")]
         hijos.forEach(function (hijo) {
-            if(!this.comprobarCampo(hijo.value,hijo.id)){
+            if (!this.comprobarCampo(hijo.value, hijo.id)) {
                 resultado = false
             }
         }.bind(this))
@@ -145,8 +147,8 @@ var sesion;
 // cojer datos del php o json
 function cogerDatoDelServer(url) {
     let ourRequest = new XMLHttpRequest();
-    let params = sesion ? "?sesion="+sesion : ""
-    ourRequest.open('GET', url +params, true);
+    let params = sesion ? "?sesion=" + sesion : ""
+    ourRequest.open('GET', url + params, true);
     // ourRequest.withCredentials = true;
     // ourRequest.setRequestHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500")
     ourRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -169,7 +171,7 @@ function cogerDatoDelServer(url) {
 
 //poner dato en el php
 function guardarDatoEnElServer(url) {
-    if(!formulario.comprobarTodosLosCampos()){
+    if (!formulario.comprobarTodosLosCampos()) {
         return
     }
     let hijos = [...document.getElementById("formulario").querySelectorAll("#formulario>.formulario")]
@@ -227,7 +229,7 @@ function cogerUsuarioDelBBDD(url, dni) {
 
 //guarda el usuario en la base de datos
 function guardarUsuarioEnBBDD(url) {
-    if(!formulario.comprobarTodosLosCampos()){
+    if (!formulario.comprobarTodosLosCampos()) {
         return
     }
     let hijos = [...document.getElementById("formulario").querySelectorAll("#formulario>.formulario")]
