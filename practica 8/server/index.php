@@ -64,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $miObjeto->password_repeat = $_POST["password_repeat"] ;
 
     $_SESSION["var"] = $miObjeto;
-    echo session_id();
+    echo json_encode( session_id());
 }
 
 

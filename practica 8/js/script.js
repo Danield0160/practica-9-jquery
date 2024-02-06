@@ -39,7 +39,6 @@ class Formulario {
         "password_repeat": {
             test:
                 function (texto) {
-                    console.log(texto, $("#password").val())
                     if (!this.comprobantes["pass"].test(texto)) {
                         return false
                     } else {
@@ -74,12 +73,11 @@ class Formulario {
             return false
         }
     }
-    //TODO
     comprobarTodosLosCampos() {
         let resultado = true
-        let hijos = [...document.getElementById("formulario").querySelectorAll("#formulario>.formulario")]
-        hijos.forEach(function (hijo) {
-            if (!this.comprobarCampo(hijo.value, hijo.id)) {
+        let hijos = $("#formulario").find(".formulario")
+        hijos.each(function (index, hijo) {
+            if (!this.comprobarCampo($(hijo).val(), $(hijo).attr("id"))) {
                 resultado = false
             }
         }.bind(this))
@@ -88,17 +86,17 @@ class Formulario {
 
     // guarda los datos en el localstorage
     guardar() {
-        let hijos = [...document.getElementById("formulario").querySelectorAll("#formulario>.formulario")]
+        let hijos = $("#formulario").find(".formulario")
         let comprobacionTodos = true
-        hijos.forEach(function (hijo) {
-            if (!this.comprobarCampo(hijo.value, hijo.id)) {
+        hijos.each(function (index, hijo) {
+            if (!this.comprobarCampo($(hijo).val(), $(hijo).attr("id"))) {
                 comprobacionTodos = false
             }
         }.bind(this))
         if (comprobacionTodos) {
             let json = {}
-            hijos.forEach(function (hijo) {
-                json[hijo.id] = hijo.value
+            hijos.each(function (index, hijo) {
+                json[$(hijo).attr("id")] = $(hijo).val()
             })
             localStorage["persona"] = JSON.stringify(json)
         }
@@ -109,7 +107,7 @@ class Formulario {
         if (datos) {
             let datosjson = JSON.parse(datos)
             for (let dato of Object.keys(datosjson)) {
-                document.getElementById(dato).value = datosjson[dato]
+                $("#" + dato).val(datosjson[dato])
                 this.comprobarCampo(datosjson[dato], dato)
             }
         }
@@ -146,27 +144,15 @@ var sesion;
 
 // cojer datos del php o json
 function cogerDatoDelServer(url) {
-    let ourRequest = new XMLHttpRequest();
     let params = sesion ? "?sesion=" + sesion : ""
-    ourRequest.open('GET', url + params, true);
-    // ourRequest.withCredentials = true;
-    // ourRequest.setRequestHeader("Access-Control-Allow-Origin", "http://127.0.0.1:5500")
-    ourRequest.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-
-
-    ourRequest.onload = function () {
-        if (ourRequest.status >= 200 && ourRequest.status < 400) {
-            console.log(this.responseText);
-            formulario.recuperar(ourRequest.responseText);
-        } else {
-            console.log("We connected to the server, but it returned an error.");
-        }
-    };
-
-    ourRequest.onerror = function () {
-        console.log("Connection error");
-    };
-    ourRequest.send(params);
+    let mi_url = url + params
+    $.ajax({
+        type: 'GET',
+        url: mi_url,
+        dataType: 'json'
+    }).done(function (data) {
+        formulario.recuperar(JSON.stringify(data));
+    });
 }
 
 //poner dato en el php
@@ -174,57 +160,36 @@ function guardarDatoEnElServer(url) {
     if (!formulario.comprobarTodosLosCampos()) {
         return
     }
-    let hijos = [...document.getElementById("formulario").querySelectorAll("#formulario>.formulario")]
+    let hijos = $("#formulario").find(".formulario")
 
     let params = ""
     for (const hijo of hijos) {
-        params += hijo.id + "=" + hijo.value + "&"
-        hijo.value = ""
-        hijo.classList.remove("valido", "no_valido")
+        params += $(hijo).attr("id") + "=" + $(hijo).val() + "&"
+        $(hijo).val("")
+        $(hijo).removeClass(["valido", "no_valido"])
     }
     params = params.slice(0, -1)
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: params
+    }).done(function (data) {
+        sesion = data
+    })
 
-    let xhr = new XMLHttpRequest();
-    xhr.withCredentials = false;
-
-
-    xhr.open('POST', url, true);
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
-    xhr.onload = function () {
-        console.log(this.responseText);
-        sesion = this.responseText
-    }
-
-    xhr.send(params);
 }
-
-
-
 
 
 //cojer datos de la bbdd en base al dni
 function cogerUsuarioDelBBDD(url, dni) {
-    let ourRequest = new XMLHttpRequest();
-    ourRequest.open('GET', url + "?q=" + dni, true);
-    // ourRequest.withCredentials = false;
-    // ourRequest.setRequestHeader("Access-Control-Allow-Origin", "*")
-    ourRequest.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
-    ourRequest.onload = function () {
-        if (ourRequest.status >= 200 && ourRequest.status < 400) {
-            console.log(ourRequest.responseText)
-            formulario.recuperar(ourRequest.responseText);
-        } else {
-            console.log("We connected to the server, but it returned an error.");
-        }
-    };
-
-    ourRequest.onerror = function () {
-        console.log("Connection error");
-    };
-
-    ourRequest.send();
+    let mi_url = url + "?q=" + dni
+    $.ajax({
+        type: 'GET',
+        url: mi_url,
+        dataType: 'json'
+    }).done(function (data) {
+        formulario.recuperar(JSON.stringify(data));
+    });
 }
 
 //guarda el usuario en la base de datos
@@ -232,54 +197,47 @@ function guardarUsuarioEnBBDD(url) {
     if (!formulario.comprobarTodosLosCampos()) {
         return
     }
-    let hijos = [...document.getElementById("formulario").querySelectorAll("#formulario>.formulario")]
+    let hijos = $("#formulario").find(".formulario")
 
     let params = ""
     for (const hijo of hijos) {
-        params += hijo.id + "=" + hijo.value + "&"
-        hijo.classList.remove("valido", "no_valido")
-        hijo.value = ""
+        params += $(hijo).attr("id") + "=" + $(hijo).val() + "&"
+        $(hijo).removeClass(["valido", "no_valido"])
+        $(hijo).val("")
     }
     params = params.slice(0, -1)
 
-
-    let xhr = new XMLHttpRequest();
-    // ourRequest.withCredentials = true;
-
-    xhr.open('POST', url, true);
-    xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-
-    xhr.onload = function () {
-        console.log(this.responseText);
-    }
-
-    xhr.send(params);
-
+    $.ajax({
+        type: 'POST',
+        url: url,
+        data: params
+    }).done(function (data) {
+        sesion = data
+    })
 }
-
 
 
 
 // asignacion de los onclick a los botones
-document.getElementById("recuperarJson").onclick = function () {
-    let direccion = document.querySelector('input[name="direccion_server"]:checked').value;
+$("#recuperarJson").on("click", function () {
+    let direccion = $("body").find('input[name="direccion_server"]:checked').val();
     cogerDatoDelServer(urls[direccion]["json"])
-}
+})
 
-document.getElementById("recuperarPhp").onclick = function () {
-    let direccion = document.querySelector('input[name="direccion_server"]:checked').value;
+$("#recuperarPhp").on("click", function () {
+    let direccion = $("body").find('input[name="direccion_server"]:checked').val();
     cogerDatoDelServer(urls[direccion]["php"])
-}
-document.getElementById("guardarPhp").onclick = function () {
-    let direccion = document.querySelector('input[name="direccion_server"]:checked').value;
+})
+$("#guardarPhp").on("click", function () {
+    let direccion = $("body").find('input[name="direccion_server"]:checked').val();
     guardarDatoEnElServer(urls[direccion]["php"])
-}
+})
 
-document.getElementById("recuperarBBDD").onclick = function () {
-    let direccion = document.querySelector('input[name="direccion_server"]:checked').value;
-    cogerUsuarioDelBBDD(urls[direccion]["bd"], document.querySelector("#bbdd>input").value)
-}
-document.getElementById("guardarBBDD").onclick = function () {
-    let direccion = document.querySelector('input[name="direccion_server"]:checked').value;
+$("#recuperarBBDD").on("click", function () {
+    let direccion = $("body").find('input[name="direccion_server"]:checked').val();
+    cogerUsuarioDelBBDD(urls[direccion]["bd"], $("body").find("#bbdd>input").val())
+})
+$("#guardarBBDD").on("click", function () {
+    let direccion = $("body").find('input[name="direccion_server"]:checked').val();
     guardarUsuarioEnBBDD(urls[direccion]["bd"],)
-}
+})
